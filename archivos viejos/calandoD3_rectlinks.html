@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Calando D3</title>
+      <script type="text/javascript" src="d3.v2.js"></script>
+      <script type="text/javascript" src="d3-textwrap.min.js"></script>
+      <LINK REL=StyleSheet HREF="overlay.css" TYPE="text/css" MEDIA=screen>
+  </head>
+
+  <style>
+    .link {
+      stroke: #000;
+      stroke-width: 1.5px;
+    }
+  </style>
+
+  <body>
+      <div id="viz"></div>
+      <script type="text/javascript">
+
+      var datos = {
+        materias: [{nombre: "Calculo Diferencial e Integral I",
+                        x: 50,
+                        y: 50,
+                        creditos: 8,
+                        mat_requiere: [null],
+                        mat_abre: [2]},
+
+                    {nombre: "Geometria",
+                          x: 50,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [null],
+                          mat_abre: [3]},
+
+                    {nombre: "Algebra",
+                          x: 50,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Intro",
+                          x: 50,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [1],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 50,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 250,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 250,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 250,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 250,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 250,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 450,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 450,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 450,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 450,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 450,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 650,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 650,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 650,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 650,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 650,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 850,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 850,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 850,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 850,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+
+                    {nombre: "Algebra",
+                          x: 850,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null]},
+            ]
+      };
+
+      //Aqui estoy creando el canvas
+      var sampleSVG = d3.select("#viz")
+          .append("svg")
+          .attr("width", 1200)
+          .attr("height", 1000);
+
+//Aqui estoy creando un filtro para que los rectangulos tengan sombra
+      var defs = sampleSVG.append( 'defs' );
+
+      // append filter element
+      var filter = defs.append( 'filter' )
+                       .attr( 'id', 'dropshadow' ); /// !!! important - define id to reference it later
+
+      // append gaussian blur to filter
+      filter.append( 'feGaussianBlur' )
+            .attr( 'in', 'SourceAlpha' )
+            .attr( 'stdDeviation', 3 ) // !!! important parameter - blur
+            .attr( 'result', 'blur' );
+
+      // append offset filter to result of gaussion blur filter
+      filter.append( 'feOffset' )
+            .attr( 'in', 'blur' )
+            .attr( 'dx', 2 ) // !!! important parameter - x-offset
+            .attr( 'dy', 3 ) // !!! important parameter - y-offset
+            .attr( 'result', 'offsetBlur' );
+
+      // merge result with original image
+      var feMerge = filter.append( 'feMerge' );
+
+      // first layer result of blur and offset
+      feMerge.append( 'feMergeNode' )
+             .attr( 'in", "offsetBlur' );
+
+      // original image on top
+      feMerge.append( 'feMergeNode' )
+             .attr( 'in', 'SourceGraphic' );
+      // end filter stuff
+//Aqui se termina la creacion del filtro
+
+      var j=-1, ren = 0;
+
+      var links = sampleSVG.selectAll(".link");
+
+      //Aqui estoy creando un grupo llamado rectangulos
+      var rectangulos = sampleSVG.selectAll("g")
+                              .data(datos.materias) //Aqui le digo que utilize los datos que estan en la variable datos
+                            .enter().append("g")
+                              //.attr("transform", function(d,i) {return "translate("+ (i*100 + 50) +",50)";})
+                              /*.attr("transform",
+                                     function(d,i) {
+                                       ren++;
+                                       if (i%4 == 0){
+                                         j+=2;
+                                         ren=0;
+                                       }
+                                       //ren = !ren;
+                                       //return "translate("+ (ren*160 + 50) +","+ (j*50) +")";
+                                       return "translate("+ (ren*185 + 50) +","+ (j*50) +")";
+                                     } );*/
+
+      rectangulos.append("rect")
+              .style("stroke", "gray")
+              .style("fill", "#e7eef8")
+              .attr("filter", "url(#dropshadow)")
+              .attr("y", function(d) {return d.y;})//-30)
+              .attr("x", function(d) {return d.x;})//-30)
+              .attr("width", 160) //150
+              .attr("height", 80)//70
+              .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+              .on("mouseout", function(){d3.select(this).style("fill", "#e7eef8");})
+              .on("mousedown", openNav);//animateFirstStep);
+
+      rectangulos.append("line")
+                .style("stroke", "black")
+                .attr("x1", function(d) {return d.x + 15;})
+                .attr("y1", function(d) {return d.y + 25;})
+                .attr("x2", function(d) {return d.x + 135;})
+                .attr("y2", function(d) {return d.y + 25 ;});
+/*
+      rectangulos.append("line")
+                .data(function (d) {return d.mat_abre;})
+                .style("stroke", "black")
+                .attr(function (d){
+                  while(d){
+                    d3.select(this)
+                    .attr("x1", function(d) {return d.x + 150;})
+                    .attr("y1", function(d) {return d.y + 35;})
+                    .attr("x2", function(d) {return datos.materias[d].x;})
+                    .attr("y2", function(d) {return datos.materias[d].y + 35;});
+                  }
+                });*/
+      /*
+      rectangulos.append("line")
+                .style("stroke", "black")
+                .attr("x1", function(d) {if(d.mat_abre[0])  return d.x + 150;})
+                .attr("y1", function(d) {if(d.mat_abre[0])  return d.y + 35;})
+                .attr("x2", function(d) {if(d.mat_abre[0])  return datos.materias[d.mat_abre[0]].x;})
+                .attr("y2", function(d) {if(d.mat_abre[0])  return datos.materias[d.mat_abre[0]].y + 35;});
+      */
+
+      rectangulos.append("text")
+              .attr("text-anchor", "middle")
+              .attr("x", function(d) {return d.x + 75;})
+              .attr("y", function(d) {return d.y + 35;})
+              .attr("dy", ".35em")
+              //.text("Pineda guarro");
+              .text(function(d) {return d.nombre;});
+
+      //var wrap = d3.textwrap().bounds({height: 50, width: 50});
+      //rectangulos.selectAll("text").call(wrap);
+
+
+      rectangulos.append("text")
+              .attr("x", function(d) {return d.x + 75;})
+              .attr("y", function(d) {return d.y + 15;})
+              .attr("text-anchor", "middle")
+              .attr("dy", ".35em")
+              .text(function(d) {return "Creditos: " + d.creditos});
+
+      rectangulos.append("text")
+              .attr("text-anchor", "middle")
+              .attr("x", function(d) {return d.x + 75;})
+              .attr("y", function(d) {return d.y + 55;})
+              .attr("dy", ".35em")
+              //.text("Pineda guarro");
+              .text(function(d) {return "Abre: " + datos.materias[d.mat_abre[0]].nombre;});
+
+      function animateFirstStep(){
+          d3.select(this)
+            .transition()
+              .delay(0)
+              .duration(500)
+              .attr("width", 145)
+              .attr("height", 65)
+              .each("end", animateSecondStep);
+      };
+
+      function animateSecondStep(){
+          d3.select(this)
+            .transition()
+              .duration(500)
+              .attr("width", 160)
+              .attr("height", 80);
+      };
+
+      /* Open when someone clicks on the span element */
+      function openNav() {
+          document.getElementById("myNav").style.width = "100%";
+      }
+
+      /* Close when someone clicks on the "x" symbol inside the overlay */
+      function closeNav() {
+          document.getElementById("myNav").style.width = "0%";
+      }
+
+      </script>
+
+      <!-- The overlay -->
+      <div id="myNav" class="overlay">
+
+         <!-- Button to close the overlay navigation -->
+         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+         <!-- Overlay content -->
+         <div class="overlay-content">
+           <a>
+           Wow
+           <br>Wow
+           <br>y mas
+           <br>wow!
+           </a>
+         </div>
+
+      </div>
+  </body>
+
+</html>
