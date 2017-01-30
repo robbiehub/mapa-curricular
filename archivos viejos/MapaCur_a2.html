@@ -3,7 +3,8 @@
   <head>
       <title>Calando D3</title>
       <script type="text/javascript" src="d3.v2.js"></script>
-    
+      <script type="text/javascript" src="obtenerDatos.js"></script>
+
       <LINK REL=StyleSheet HREF="overlay.css" TYPE="text/css" MEDIA=screen>
   </head>
 
@@ -19,7 +20,8 @@
       <div id="viz" class="divi"></div>
       <script type="text/javascript">
 
-      var datos = {
+      var datos = LeerExcel();
+  /*    var datos = {
         materias: [{nombre: "Calculo Diferencial e Integral I",
                         x: 50,
                         y: 50,
@@ -196,7 +198,7 @@
                           mat_abre: [null], tipo: 4, semestre: 5},
             ]
       };
-
+*/
       //Aqui estoy creando el canvas
       var sampleSVG = d3.select("#viz")
           .append("svg")
@@ -226,7 +228,7 @@
               //.attr("id", function(d){return d.nombre})
               .style("stroke", "gray")
               //Colores: Obligatoria: #e7eef8, Optativa: #ff9a66, Especializante: #9bfe65, Integrador: #9966ff
-              .style("fill", function(d){ return defineColor(d.tipo); })//"#e7eef8")
+              .style("fill", function(d){ return defineColor(d.eje); })//"#e7eef8")
               //.attr("filter", "url(#dropshadow)")
               .attr("y", function(d) {return d.y;})//-30)
               .attr("x", function(d) {return (d.semestre-1)*15+5 + "%";})//-30)
@@ -239,21 +241,21 @@
               // Integrador: #ad85fe
               .on("mouseover", function(d){
                 var color;
-                switch (d.tipo) {
-                case 2:
+                switch (d.eje) {
+                case "P":
                   color = "#ffad82";
                   break;
-                case 3:
+                case "E":
                   color = "#adfd84";
                   break;
-                case 4:
+                case "I":
                   color = "#ad85fe";
                   break;
                 default: color = "aliceblue";
 
               }
                 d3.select(this).style("fill", color);})
-              .on("mouseout", function(d){d3.select(this).style("fill", defineColor(d.tipo)); })//function(){d3.select(this).style("fill", "#e7eef8");})
+              .on("mouseout", function(d){d3.select(this).style("fill", defineColor(d.eje)); })//function(){d3.select(this).style("fill", "#e7eef8");})
               .on("mousedown", function(d){ overlayInfo(d); });//openNav);//animateFirstStep);
 /*
       rectangulos.append("line")
@@ -345,13 +347,13 @@
       }
 
       function defineColor(tipoMateria){switch (tipoMateria) {
-        case 2:
+        case "P":
           return "#ff9a66";
           break;
-        case 3:
+        case "E":
           return "#9bfe65";
           break;
-        case 4:
+        case "I":
           return "#9966ff";
           break;
         default:  return "#e7eef8";

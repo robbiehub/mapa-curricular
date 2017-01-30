@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Calando D3</title>
+      <script type="text/javascript" src="d3.v2.js"></script>
+      <script type="text/javascript" src="obtenerDatos.js"></script>
+      <script src="xlsx.full.min.js"></script>
+      <script src="http://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script>
+
+      <LINK REL=StyleSheet HREF="overlay.css" TYPE="text/css" MEDIA=screen>
+  </head>
+
+  <style>
+    .link {
+      stroke: #000;
+      stroke-width: 1.5px;
+    }
+  </style>
+
+  <body>
+      <h1 class="header">Mapa Curricular</h1>
+      <div id="viz" class="divi"></div>
+      <script type="text/javascript">
+      var contador = 0; var semestreActual = 1; //Estas variables van ayudar a determinar las posiciones Y
+      var datos = [];
+      datos = LeerExcel(function(){
+        console.log("Datos extraidos!");
+        //console.log(datos);
+        dibujarMapa(datos);
+      });
+/*     var datos = {
+        materias: [{nombre: "Calculo Diferencial e Integral I",
+                        x: 50,
+                        y: 50,
+                        creditos: 8,
+                        mat_requiere: [null],
+                        mat_abre: [2], tipo: 1, semestre: 1},
+
+                    {nombre: "Geometria",
+                          x: 50,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [null],
+                          mat_abre: [3], tipo: 1, semestre: 1},
+
+                    {nombre: "Algebra",
+                          x: 50,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 1},
+
+                    {nombre: "Intro",
+                          x: 50,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [1],
+                          mat_abre: [null], tipo: 2, semestre: 1},
+
+                    {nombre: "Algebra-2",
+                          x: 50,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 1},
+
+                    {nombre: "Algebra-3",
+                          x: 250,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 2},
+
+                    {nombre: "Algebra-4",
+                          x: 250,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 2},
+
+                    {nombre: "Algebra-5",
+                          x: 250,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 2},
+
+                    {nombre: "Algebra-6",
+                          x: 250,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 2},
+
+                    {nombre: "Algebra-7",
+                          x: 250,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 2},
+
+                    {nombre: "Algebra-8",
+                          x: 450,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 3},
+
+                    {nombre: "Algebra-9",
+                          x: 450,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 3},
+
+                    {nombre: "Algebra-10",
+                          x: 450,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 3},
+
+                    {nombre: "Algebra-11",
+                          x: 450,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 3},
+
+                    {nombre: "Algebra-12",
+                          x: 450,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 3},
+
+                    {nombre: "Algebra-13",
+                          x: 650,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 4},
+
+                    {nombre: "Algebra-14",
+                          x: 650,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 4},
+
+                    {nombre: "Algebra-15",
+                          x: 650,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 4},
+
+                    {nombre: "Algebra-16",
+                          x: 650,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 4},
+
+                    {nombre: "Algebra-17",
+                          x: 650,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 1, semestre: 4},
+
+                    {nombre: "Algebra-18",
+                          x: 850,
+                          y: 50,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 3, semestre: 5},
+
+                    {nombre: "Algebra-19",
+                          x: 850,
+                          y: 150,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 3, semestre: 5},
+
+                    {nombre: "Algebra-20",
+                          x: 850,
+                          y: 250,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 3, semestre: 5},
+
+                    {nombre: "Algebra-21",
+                          x: 850,
+                          y: 350,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 4, semestre: 5},
+
+                    {nombre: "Algebra-22",
+                          x: 850,
+                          y: 450,
+                          creditos: 6,
+                          mat_requiere: [0],
+                          mat_abre: [null], tipo: 4, semestre: 5},
+            ]
+      };
+*/
+      //Aqui estoy creando el canvas
+      function dibujarMapa(datos){
+        var sampleSVG = d3.select("#viz")
+            .append("svg")
+            .attr("id", "canvas")
+            .attr("width", "500")
+            .attr("height", "500")
+
+        var j=-1, ren = 0;
+
+        var links = sampleSVG.selectAll(".link");
+        //Aqui estoy creando un grupo llamado rectangulos
+
+        var rectangulos = sampleSVG.selectAll("g")
+                                .data(datos.materias) //Aqui le digo que utilize los datos que estan en la variable datos
+                              .enter().append("g")
+                                .attr("transform", "translate(15,15)");
+
+        rectangulos.append("rect")
+                .style("stroke", "gray")
+                //Colores: Obligatoria: #e7eef8, Optativa: #ff9a66, Especializante: #9bfe65, Integrador: #9966ff
+                .style("fill", function(d){ return defineColor(d.eje); })
+                .attr("y", function(d) {return determinaPosY(d.semestre)*100;})
+                .attr("x", function(d) {return (d.semestre)*180;})
+                .attr("width", 160) //150 o 160
+                .attr("height", 80)//70 o 80
+                //Colores al pasar con el mouse:
+                // Obligatoria: aliceblue
+                // Optativa: #ffad82
+                // Especializante: #adfd84
+                // Integrador: #ad85fe
+                .on("mouseover", function(d){
+                  var color;
+                  switch (d.eje) {
+                  case "P":
+                    color = "#ffad82";
+                    break;
+                  case "E":
+                    color = "#adfd84";
+                    break;
+                  case "I":
+                    color = "#ad85fe";
+                    break;
+                  default: color = "aliceblue";
+
+                }
+                  d3.select(this).style("fill", color);})
+                .on("mouseout", function(d){d3.select(this).style("fill", defineColor(d.eje)); })
+                .on("mousedown", function(d){ overlayInfo(d); });
+
+  /*
+        rectangulos.append("line")
+                  .style("stroke", "black")
+                  .attr("x1", function(){return d3.select(this.parentNode).select("rect").attr("x");})//function(d) {return 15;})
+                  .attr("transform", "translate(15,0)")
+                  .attr("y1", function(d) {return d.y + 25;})
+                  .attr("x2", function(){console.log("BBox: " + d3.select(this.parentNode).select("rect").node().getBBox().x);
+                    return d3.select(this.parentNode).select("rect").node().getBBox().x;})
+                  //.attr("x2", function(d) {return 135;})
+                  .attr("y2", function(d) {return d.y + 25 ;});
+  */
+        rectangulos.append("text")
+                .attr("text-anchor", "middle")
+                .attr("x", function(){return d3.select(this.parentNode).select("rect").attr("x");})
+                .attr("transform","translate(80,40)")
+                .attr("y", function(){return d3.select(this.parentNode).select("rect").attr("y");})
+                .attr("dy", ".35em")
+                .attr("textLength", 155)
+                .attr("lengthAdjust", "spacingAndGlyphs")
+                .text(function(d) {return d.nombre;});
+
+
+
+        rectangulos.append("text")
+                .attr("x", function(){return d3.select(this.parentNode).select("rect").attr("x");})
+                .attr("transform", "translate(80,15)")
+                .attr("y", function(){return d3.select(this.parentNode).select("rect").attr("y");})
+                .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
+                .text(function(d) {return "Creditos: " + d.creditos});
+
+        rectangulos.append("text")
+                .attr("text-anchor", "middle")
+                .attr("x", function(){return d3.select(this.parentNode).select("rect").attr("x");})
+                .attr("transform", "translate(80,60)")
+                .attr("y", function(){return d3.select(this.parentNode).select("rect").attr("y");})
+                .attr("dy", ".35em")
+                .text(function(d){ return d.semestre;});
+      }
+
+      function animateFirstStep(){
+          d3.select(this)
+            .transition()
+              .delay(0)
+              .duration(500)
+              .attr("width", 145)
+              .attr("height", 65)
+              .each("end", animateSecondStep);
+      };
+
+      function animateSecondStep(){
+          d3.select(this)
+            .transition()
+              .duration(500)
+              .attr("width", 160)
+              .attr("height", 80);
+      };
+
+      /* Open when someone clicks on the span element */
+      function openNav() {
+        document.getElementById("myNav").style.width = "100%";
+      }
+
+      /* Close when someone clicks on the "x" symbol inside the overlay */
+      function closeNav() {
+          document.getElementById("myNav").style.width = "0%";
+      }
+
+      function overlayInfo(datosMateria){
+        var overlayHTML =  "<!-- Button to close the overlay navigation -->\
+           <a href=\"javascript:void(0)\" class=\"closebtn\" onclick=\"closeNav()\">&times;</a>\
+           <!-- Overlay content -->\
+           <div class=\"overlay-content\">\
+             <a><b>Materia:</b><br>"+ datosMateria["nombre"] +
+             "</a>\
+             <a><b>Creditos:</b><br>"+ datosMateria["creditos"] +
+             "</a>\
+              </div>";
+        //</div>";
+
+        document.getElementById("myNav").innerHTML = (overlayHTML);
+        openNav();
+        //overlayHTML.getElementById("myNav").style.width="100%";
+      }
+
+      function defineColor(tipoMateria){switch (tipoMateria) {
+        case "P":
+          return "#ff9a66";
+          break;
+        case "E":
+          return "#9bfe65";
+          break;
+        case "I":
+          return "#9966ff";
+          break;
+        default:  return "#e7eef8";
+      }}
+
+      function determinaPosY(semestre){
+        if(parseInt(d3.select("svg").attr("height")) < (contador*100)){
+          d3.select("svg").attr("height", function(){return 100*(contador) + 15});
+        }
+        if(semestreActual != semestre){
+          semestreActual = semestre;
+          contador = 0;
+          d3.select("svg").attr("width", function(){return 180*(semestre+1) + 15}); //Aqui se cambia el tamaño del canvas si un objeto no cabe
+        }
+        return contador++;
+      }
+      </script>
+
+
+      </div>
+      <div id="myNav" class="overlay"></div>
+  </body>
+
+</html>
